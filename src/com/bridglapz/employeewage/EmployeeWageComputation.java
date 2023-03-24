@@ -1,37 +1,38 @@
 package com.bridglapz.employeewage;
 
 public class EmployeeWageComputation{
-	
-	
-	  public static final int is_Part_Time=1;
-	   public static final int is_Full_Time=2;
-	   public static final int is_Total_Emp_Rate=20;
-	   public static final int number_Of_Working=20;
-	   
-	   
-	   public static void main(String args[]) {
-		   int employee_Hour=0;
-		   int employee_Wage=0;
-		   int  totalEmployeeWage=0;
-		   int check=(int) Math.floor(Math.random()*10)%3;
-		   for(int day=0;day<number_Of_Working;day++) {
-		   switch(check) {
-		   case  is_Part_Time:
-			   employee_Hour=4;
-			   break;
-			   
-		   case is_Full_Time:
-			   employee_Hour=8;
-			   break;
-			   
+	public static final int is_Part_Time_Working = 1;
+	public static final int is_Full_Time_Working = 2;
+	public static final int is_Employee_Rate_Per_Hour = 20;
+	public static final int is_Maximum_Working_Hour_Month = 100;
+	public static final int is_Maximum_Working_Day_Month = 20;
+
+	public static void main(String args[]){
+		int employeeHour = 0;
+		int employeeTotalHour = 0;
+		int employeeTotalDayMonth = 0;
+		while (employeeTotalHour <= is_Maximum_Working_Hour_Month
+				&& employeeTotalDayMonth < is_Maximum_Working_Day_Month) {
+			employeeTotalDayMonth++;
+
+			int check = (int) Math.floor(Math.random() * 10) % 3;
+			switch (check) {
+			case is_Part_Time_Working:
+				employeeHour = 4;
+				break;
+
+			case is_Full_Time_Working:
+				employeeHour = 8;
+				break;
+
 			default:
-				employee_Hour=0;
-		   }
-		  employee_Wage=employee_Hour* is_Total_Emp_Rate;
-		  totalEmployeeWage=totalEmployeeWage+employee_Wage;
-		  System.out.println(employee_Wage);
-		  System.out.println(totalEmployeeWage);
-	   }
-	   }
+				employeeHour = 0;
+			}
+
+			int employeWage = employeeHour * is_Employee_Rate_Per_Hour;
+			employeeTotalHour = employeeTotalHour + employeWage;
+			System.out.println(employeWage);
+			System.out.println(employeeTotalHour);
+		}
 }
-	
+}
