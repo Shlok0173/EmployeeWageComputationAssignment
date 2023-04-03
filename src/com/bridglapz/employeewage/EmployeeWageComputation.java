@@ -1,70 +1,75 @@
 package com.bridglapz.employeewage;
 
+import java.lang.reflect.Array;
+import java.util.Scanner;
+
 public class EmployeeWageComputation {
 
-	public final int fullTime = 1;
-	public final int partTime = 2;
+	 static final int fullTime = 1;
+	    static final int partTime = 2;
+	    int wagePerHr;
+	    int empHrs = 0;
+	    int monthlyWage = 0;
+	    int totalWorkingHrs;
+	    int totalWorkingDays;
+	    int workedHrs = 0;
+	    static int i;
+	    static int company1TotalWage;
+	    static int company2TotalWage;
+	    static int company3TotalWage;
 
-	String company;
-	int wagePerHr;
-	int daysPerMonth;
-	int workHrPerMonth;
-	int totalWage;
+	    public int empWageBuilder() {
 
-	public EmployeeWageComputation(String company, int wagePerHr, int daysPerMonth, int workHrPerMonth) {
-		this.company = company;
-		this.wagePerHr = wagePerHr;
-		this.daysPerMonth = daysPerMonth;
-		this.workHrPerMonth = workHrPerMonth;
-	}
+	        Scanner sc = new Scanner(System.in);
+	        System.out.println("Enter the wage_per_hr: ");
+	        wagePerHr = sc.nextInt();
+	        System.out.println("Enter the total Working days: ");
+	        totalWorkingDays = sc.nextInt();
+	        System.out.println("Enter the total working hrs in a month: ");
+	        totalWorkingHrs = sc.nextInt();
 
-	public String toString() {
-		return "Total employee wage for " + company + " is " + totalWage;
-	}
+	        for (i = 0; i < totalWorkingDays && workedHrs < totalWorkingHrs; i++) {
 
-	void calculateWage() {
+	            int empCheck = (int) Math.floor(Math.random() * 10) % 3;
 
-		int empHrs;
-		int totalHours = 0;
-		int dailyWage;
-		int day = 0;
+	            switch (empCheck) {
+	                case fullTime:
+	                    empHrs = 8;
+	                    break;
+	                case partTime:
+	                    empHrs = 4;
+	                    break;
+	                default:
+	                    empHrs = 0;
+	                    break;
+	            }
+	            int empWage = empHrs * wagePerHr;
+	            System.out.println("Employee wage is: " + empWage);
+	            monthlyWage = monthlyWage + empWage;
+	            workedHrs = workedHrs + empHrs;
+	        }
+	        System.out.println("Employee Monthly wage is: " + monthlyWage);
+	        System.out.println("Working Days = " + i + ", Total working hrs = " + workedHrs);
+	        return monthlyWage;
+	    }
 
-		while ((totalHours < workHrPerMonth) && (day < daysPerMonth)) {
+	    public static void main(String[] args) {
 
-			int attendance = (int) (Math.floor(Math.random() * 10)) % 3;
+	        EmployeeWageComputation company1 = new EmployeeWageComputation();
+	        EmployeeWageComputation company2 = new EmployeeWageComputation();
+	        EmployeeWageComputation company3 = new EmployeeWageComputation();
 
-			switch (attendance) {
-			case fullTime:
-				empHrs = 8;
-				break;
-			case partTime:
-				empHrs = 4;
-				break;
-			default:
-				empHrs = 0;
-				break;
-			}
-			totalHours = totalHours + empHrs;
-			dailyWage = wagePerHr * empHrs;
-			totalWage = totalWage + dailyWage;
-			day++;
-		}
-		System.out.println("Total work hours is: " + totalHours);
-		System.out.println("Total work days are: " + day);
-	}
+	        company1TotalWage = company1.empWageBuilder();
+	        System.out.println("Employee wage for company1: " + company1TotalWage);
+	        company2TotalWage = company2.empWageBuilder();
+	        System.out.println("Employee wage for company2: " + company2TotalWage);
+	        company3TotalWage = company2.empWageBuilder();
+	        System.out.println("Employee wage for company3: " + company3TotalWage);
 
-	public static void main(String[] args) {
-
-		EmployeeWageComputation Tata = new EmployeeWageComputation("Tata", 10, 20, 100);
-		EmployeeWageComputation Reliance = new EmployeeWageComputation("Reliance", 20, 22, 90);
-		EmployeeWageComputation Mahindra = new EmployeeWageComputation("Mahindra", 20, 22, 90);
-		Tata.calculateWage();
-		System.out.println(Tata);
-		System.out.println("------------------------------------");
-		Reliance.calculateWage();
-		System.out.println(Reliance);
-		System.out.println("------------------------------------");
-		Mahindra.calculateWage();
-		System.out.println(Mahindra);
-	}
+	        EmployeeWageComputation[] companyEmpWageArray = new EmployeeWageComputation[3];
+	        companyEmpWageArray[0] = company1;
+	        companyEmpWageArray[1] = company2;
+	        companyEmpWageArray[2] = company3;
+	        System.out.println(Array.get(companyEmpWageArray, i));
+	    }
 }
