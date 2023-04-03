@@ -2,51 +2,69 @@ package com.bridglapz.employeewage;
 
 public class EmployeeWageComputation {
 
-	public static final int is_part_time = 1;
-	public static final int is_full_time = 2;
-	public static final int emp_rate_per_hour = 20;
-	public static final int num_of_working_day = 20;
-	public static final int max_hours_in_month = 100;
+	public final int fullTime = 1;
+	public final int partTime = 2;
 
-	public static void employeeWageComputation() {
+	String company;
+	int wagePerHr;
+	int daysPerMonth;
+	int workHrPerMonth;
+	int totalWage;
 
-		System.out.println("Welcome To  Employee Wage Computaion");
+	public EmployeeWageComputation(String company, int wagePerHr, int daysPerMonth, int workHrPerMonth) {
+		this.company = company;
+		this.wagePerHr = wagePerHr;
+		this.daysPerMonth = daysPerMonth;
+		this.workHrPerMonth = workHrPerMonth;
+	}
 
-		int empHours = 0;
-		int totalEmpHours = 0;
-		int totalWorkingDay = 0;
+	public String toString() {
+		return "Total employee wage for " + company + " is " + totalWage;
+	}
 
-		int checkEmployee = (int) Math.floor(Math.random() * 10) % 3;
+	void calculateWage() {
 
-		while (totalEmpHours <= max_hours_in_month && totalWorkingDay < num_of_working_day) {
+		int empHrs;
+		int totalHours = 0;
+		int dailyWage;
+		int day = 0;
 
-			totalWorkingDay++;
+		while ((totalHours < workHrPerMonth) && (day < daysPerMonth)) {
 
-			switch (checkEmployee) {
-			case is_part_time:
-				empHours = 4;
+			int attendance = (int) (Math.floor(Math.random() * 10)) % 3;
+
+			switch (attendance) {
+			case fullTime:
+				empHrs = 8;
 				break;
-
-			case is_full_time:
-				empHours = 8;
+			case partTime:
+				empHrs = 4;
 				break;
-
 			default:
-				empHours = 0;
+				empHrs = 0;
 				break;
 			}
-
-			int EmployeeWage = empHours * emp_rate_per_hour;
-			totalEmpHours = totalEmpHours + EmployeeWage;
-
-			System.out.println("EmployeeWage" + " " + EmployeeWage);
-			System.out.println("TotalEmpHours" + " " + totalEmpHours);
+			totalHours = totalHours + empHrs;
+			dailyWage = wagePerHr * empHrs;
+			totalWage = totalWage + dailyWage;
+			day++;
 		}
+		System.out.println("Total work hours is: " + totalHours);
+		System.out.println("Total work days are: " + day);
 	}
 
-	public static void main(String args[]) {
-		employeeWageComputation();
+	public static void main(String[] args) {
 
+		EmployeeWageComputation Tata = new EmployeeWageComputation("Tata", 10, 20, 100);
+		EmployeeWageComputation Reliance = new EmployeeWageComputation("Reliance", 20, 22, 90);
+		EmployeeWageComputation Mahindra = new EmployeeWageComputation("Mahindra", 20, 22, 90);
+		Tata.calculateWage();
+		System.out.println(Tata);
+		System.out.println("------------------------------------");
+		Reliance.calculateWage();
+		System.out.println(Reliance);
+		System.out.println("------------------------------------");
+		Mahindra.calculateWage();
+		System.out.println(Mahindra);
 	}
-
 }
