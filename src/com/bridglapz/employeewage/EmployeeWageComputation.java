@@ -87,7 +87,8 @@ public class EmployeeWageComputation{
 	                System.out.println("Emp hrs for day "+totalworkdays+" is: "+employeehrs);
 	                System.out.println("Daily wage for employee is: "+ employeehrs*c.empRatePerHour);
 	            }
-	            return totalemphrs* c.empRatePerHour;
+	            int getTotalWage(String company) {
+	                return compWageMap.get(company).totalwage;
 	        }
 	    }
 	    public static void main(String[] args) {
@@ -95,6 +96,7 @@ public class EmployeeWageComputation{
 	        e.addEmployeeWage("D-Mart",20,20,100);
 	        e.addEmployeeWage("Amazon",10,10,100);
 	        e.computeCompanyWage();
+	        System.out.println("Total wage for company Amazon is "+e.getTotalWage("Amazon"));
 
 	    }
     
