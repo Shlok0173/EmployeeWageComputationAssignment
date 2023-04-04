@@ -1,125 +1,101 @@
 package com.bridglapz.employeewage;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-interface IEmployeeWageComputation
-{
-    public void addCompany(String companyName, int wagePerHr, int maxWorkingDays, int maxWorkingHrs);
+public class EmployeeWageComputation{
+    public interface IfComputeEmpWage{
 
-    public void calculateTotalWage();
-}
-
-class CompanyEmpWage
-{
-    // instance constants
-    final String COMPANY_NAME;
-    final int WAGE_PER_HR;
-    final int MAX_WORKING_DAYS;
-    final int MAX_WORKING_HRS;
-    // instance variable
-    int totalEmpWage;
-
-    CompanyEmpWage(String companyName, int wagePerHr, int maxWorkingDays, int maxWorkingHrs)
-    {
-        COMPANY_NAME = companyName;
-        WAGE_PER_HR = wagePerHr;
-        MAX_WORKING_DAYS = maxWorkingDays;
-        MAX_WORKING_HRS = maxWorkingHrs;
-        totalEmpWage = 0;
+        public void addEmployeeWage(String company,int empRatePerHour,int numOfWorkingDays, int maxHourPerMonth);
+        public void computeCompanyWage();
     }
+    public static class CompWage{
+        public String company;
+        public int empRatePerHour;
+        public int numWorkingDays;
+        public int maxHourPerMonth;
+        public int totalWage;
 
-    void setTotalEmployeeWage(int totalEmpWage)
-    {
-        this.totalEmpWage = totalEmpWage;
-    }
-
-    @Override
-    public String toString()
-    {
-        System.out.println("Details of " + COMPANY_NAME + " employee");
-        System.out.println("-----------------------------------------------------");
-        System.err.println("Wage per hour:" + WAGE_PER_HR);
-        System.out.println("Maximum working days:" + MAX_WORKING_DAYS);
-        System.out.println("Maximum working hours:" + MAX_WORKING_HRS);
-        return "Total wage for a month of " + COMPANY_NAME + " employee is " + totalEmpWage + "\n";
-    }
-}
-
-public class EmployeeWages implements IEmployeeWageComputation
-{
-    // class constants
-    public static final int PART_TIME = 1;
-    public static final int FULL_TIME = 2;
-    // instance variables
-    int noOfCompanies, index;
-    CompanyEmpWage[] companies;
-
-    public EmployeeWages (int noOfCompanies)
-    {
-        this.noOfCompanies = noOfCompanies;
-        companies = new CompanyEmpWage[noOfCompanies];
-        index = 0;
-    }
-
-    public void addCompany(String companyName, int wagePerHr, int maxWorkingDays, int maxWorkingHrs)
-    {
-        companies[index++] = new CompanyEmpWage(companyName, wagePerHr, maxWorkingDays, maxWorkingHrs);
-    }
-
-    int generateEmployeeType()
-    {
-        return (int) (Math.random() * 100) % 3;
-    }
-
-    int getWorkingHrs(int empType)
-    {
-        switch (empType)
+        public CompWage(String company,int empRatePerHour,int numWorkingDays, int maxHourPerMonth)
         {
-            case FULL_TIME:
-                return 8;
-            case PART_TIME:
-                return 4;
-            default:
-                return 0;
+            this.company=company;
+            this.empRatePerHour=empRatePerHour;
+            this.numWorkingDays=numWorkingDays;
+            this.maxHourPerMonth=maxHourPerMonth;
+        }
+        public void setTotalWage(int totalwage)
+        {
+            this.totalWage=totalwage;
+        }
+        public String toString()
+        {
+            return "Total emp wage for company: "+company+" is "+totalWage;
         }
     }
 
-    public void calculateTotalWage()
+    public static class EmpBuilder implements IfComputeEmpWage
     {
-        for (CompanyEmpWage company : companies)
+        static final int IS_FULL_TIME=2;
+        static final int IS_PART_TIME=1;
+        public ArrayList<CompWage> compempwagelist;
+        private int n=0;
+
+        public EmpBuilder()
         {
-            int totalWage = calculateTotalWage(company);
-            company.setTotalEmployeeWage(totalWage);
-            System.out.println(company);
+            compempwagelist= new ArrayList();
+
+        }
+        public void addEmployeeWage(String company,int empRatePerHour,int numWorkingDays, int maxHourPerMonth)
+        {
+            CompWage c =new CompWage(company,empRatePerHour,numWorkingDays,maxHourPerMonth);
+            compempwagelist.add(c);
+        }
+        public void computeCompanyWage()
+        {
+            for(int i=0;i<compempwagelist.size();i++)
+            {
+                CompWage c1=compempwagelist.get(i);
+                c1.setTotalWage(this.ComputeWage(c1));
+                System.out.println(c1.totalWage);
+            }
+        }
+        public int ComputeWage(CompWage c)
+        {
+            int employeehrs=0;
+            int totalworkdays=0;
+            int totalemphrs=0;
+            //int totalwage=0;
+
+            while(totalemphrs<=c.maxHourPerMonth&&totalworkdays<c.numWorkingDays)
+            {
+                totalworkdays++;
+                int empcheck=(int) Math.floor(Math.random()*10)%3;
+
+                switch(empcheck)
+                {
+                    case 1:
+                        employeehrs=4;
+                        break;
+                    case 2:
+                        employeehrs=8;
+                        break;
+                    default:
+                        employeehrs=0;
+                }
+                totalemphrs+=employeehrs;
+                System.out.println("Emp hrs for day "+totalworkdays+" is: "+employeehrs);
+            }
+            return totalemphrs* c.empRatePerHour;
         }
     }
+    public static void main(String[] args) {
+        IfComputeEmpWage e= new EmpBuilder();
+        e.addEmployeeWage("D-Mart",20,20,100);
+        e.addEmployeeWage("Amazon",10,10,100);
+        e.computeCompanyWage();
 
-    int calculateTotalWage(CompanyEmpWage companyEmpWage)
-    {
-        System.out.println("Computation of total wage of " + companyEmpWage.COMPANY_NAME + " employee");
-        System.out.println("-----------------------------------------------------");
-      
-
-        int workingHrs, totalWage = 0;
-        for (int day = 1, totalWorkingHrs = 0; day <= companyEmpWage.MAX_WORKING_DAYS
-                && totalWorkingHrs <= companyEmpWage.MAX_WORKING_HRS; day++, totalWorkingHrs += workingHrs)
-        {
-            int empType = generateEmployeeType();
-            workingHrs = getWorkingHrs(empType);
-            int wage = workingHrs * companyEmpWage.WAGE_PER_HR;
-            totalWage += wage;
-            System.out.println( day, workingHrs, wage, totalWorkingHrs + workingHrs);
-        }
-        return totalWage;
     }
-
-    public static void main(String args[])
-    {
-        EmployeeWages  manageWageMultipleCompanies = new EmployeeWages (3);
-        manageWageMultipleCompanies.addCompany("D-Mart", 20, 20, 100);
-        manageWageMultipleCompanies.addCompany("Amazon", 10, 10, 100);
-        manageWageMultipleCompanies.calculateTotalWage();
-    }
+    
 
 }
